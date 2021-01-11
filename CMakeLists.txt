@@ -1,14 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
 
-# project(example)
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -g")
 set(CUDA_DIR /usr/local/cuda-10.2)
 set(TRT_ROOT /home/user/Software/TensorRT-7.1.3.4)
 
 # find_package(CUDA REQUIRED)  # cuda compiler needed
 
-include(CheckLanguage)  # cuda语法需要
+include(CheckLanguage)  # cuda grammar needed
 check_language(CUDA)
 if (CMAKE_CUDA_COMPILER)
     enable_language(CUDA)
@@ -17,7 +15,7 @@ else ()
 endif()
 
 #----------- Set architecture and CUDA -----------#
-# 可以根据自己的机器只写一个
+# adjust with your machine
 set(CUDA_NVCC_FLAGS
         ${CUDA_NVCC_FLAGS}
         -O3
@@ -40,8 +38,6 @@ include_directories(/usr/local/include
                     ${TRT_ROOT}/include
                     ${CUDA_DIR}/include)
 
-#----------------------------------------------#
-
 file(GLOB SRC ${PROJECT_SOURCE_DIR}/rt_api/*.cpp)
 file(GLOB CU_SRC ${PROJECT_SOURCE_DIR}/cuda_sample/*.cu)
 
@@ -49,6 +45,6 @@ link_directories(/usr/local/lib ${CUDA_DIR}/lib64 ${TRT_ROOT}/lib)
 
 add_executable(example1 example1.cpp ${CU_SRC})
 add_executable(example2 example2.cpp ${CU_SRC})
-# cuda_add_executable(test2 test2.cpp ${CU_SRC})  # 这也ok,需要find CUDA依赖
+# cuda_add_executable(test2 test2.cpp ${CU_SRC})  # it is ok with CUDA package finded
 add_executable(example3 example3.cpp ${SRC})
 target_link_libraries(example3 nvinfer ${CUDART})
