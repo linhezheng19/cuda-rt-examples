@@ -84,10 +84,10 @@ map<string, nvinfer1::Weights> SampleAlexnet::loadWeights(const string& weight_f
 }
 
 bool SampleAlexnet::createEngine(IBuilder* builder, DataType type, const string& weight_file) {
-    INetworkDefinition* net = builder->createNetworkV2(0U);  // fix input chw, not bchw
+    INetworkDefinition* net = builder->createNetworkV2(0U);  // fix input chw, not bchw, 1U for bchw
     IBuilderConfig* config = builder->createBuilderConfig();
     // define input
-    ITensor* input = net->addInput(INPUT_BLOB_NAME, type, nvinfer1::Dims3{3, INPUT_H, INPUT_W});
+    ITensor* input = net->addInput(INPUT_BLOB_NAME, type, nvinfer1::Dims3{3, INPUT_H, INPUT_W});  // Dims4(b, c, h, w) for batch inputs.
     assert(input && "create input failed!");
 
     // load weights from file
